@@ -64,13 +64,13 @@ userSchema.pre("save", async function (next) {
     // create method - isPasswordCorrect, and then make async function with input param - paassword
 userSchema.methods.isPasswordCorrect = async function (password) {
     //compare need two params (1)orignal password (2)encrypted password
-    await bcrypt.compare(password, this.password)
+    return await bcrypt.compare(password, this.password)
 }
 
 //access token generat
 userSchema.methods.generateAccessToken = function () {
-    jwt.sign({
-        //payload
+    //syntax : jwt.sign({payload}, env-variable, {expiry})
+    return jwt.sign({
         _id: this._id,
         email: this.email,
         username: this.username,
@@ -85,8 +85,7 @@ userSchema.methods.generateAccessToken = function () {
 
 //refresh token generat
 userSchema.methods.generateRefreshToken = function () {
-    jwt.sign({
-        //payload
+    return jwt.sign({
         _id: this._id, 
     },
     process.env.REFRESH_TOKEN_SECRET,
